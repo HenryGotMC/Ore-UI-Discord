@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.1.1
+- Fix: mic/headphones icon disappearing after unmute/undeafen — icons now match any Mute/Unmute/Deafen label and read the off-state from aria-checked, red icon or strikethrough
+
 ## 3.1.0
 - Custom 16×16 pixel icon set (16 icons) + `src/ore-icons.css`, toggle with `--ore-icons`
 

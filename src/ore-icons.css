@@ -1,13 +1,14 @@
-/* Ore Block icons — 16×16 pixel icons painted as masks, so they take the
+/* Ore Block icons v3.1.1 — mic/headphones match any Mute/Unmute/Deafen label; off-state via aria-checked, red icon or strikethrough.
+   Ore Block icons — 16×16 pixel icons painted as masks, so they take the
    current text / hover / muted-red / accent colour. Toggle: --ore-icons: off */
 :root { --ore-icons: on; }
 
 @container style(--ore-icons: on) {
   :is(
-  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Mute"]:not([aria-checked="true"]),
-  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Unmute"], [aria-label="Mute"][aria-checked="true"]),
-  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Deafen"]:not([aria-checked="true"]),
-  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Undeafen"], [aria-label="Deafen"][aria-checked="true"]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="ute" i], [aria-label*="icrophone" i]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="ute" i], [aria-label*="icrophone" i]):is([aria-label="Unmute" i], [aria-checked="true"], [class*="redIcon"], :has([class*="strikethrough"])),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="eafen" i], [aria-label*="eadphone" i]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="eafen" i], [aria-label*="eadphone" i]):is([aria-label="Undeafen" i], [aria-checked="true"], [class*="redIcon"], :has([class*="strikethrough"])),
   section[class*="panels_"] button[aria-label="User Settings"],
   section[class*="panels_"] button[aria-label="Disconnect"],
   :is(button, [role="button"])[aria-label="Inbox"],
@@ -23,10 +24,10 @@
   ) { position: relative; }
 
   :is(
-  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Mute"]:not([aria-checked="true"]),
-  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Unmute"], [aria-label="Mute"][aria-checked="true"]),
-  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Deafen"]:not([aria-checked="true"]),
-  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Undeafen"], [aria-label="Deafen"][aria-checked="true"]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="ute" i], [aria-label*="icrophone" i]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="ute" i], [aria-label*="icrophone" i]):is([aria-label="Unmute" i], [aria-checked="true"], [class*="redIcon"], :has([class*="strikethrough"])),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="eafen" i], [aria-label*="eadphone" i]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="eafen" i], [aria-label*="eadphone" i]):is([aria-label="Undeafen" i], [aria-checked="true"], [class*="redIcon"], :has([class*="strikethrough"])),
   section[class*="panels_"] button[aria-label="User Settings"],
   section[class*="panels_"] button[aria-label="Disconnect"],
   :is(button, [role="button"])[aria-label="Inbox"],
@@ -42,10 +43,10 @@
   ) svg { opacity: 0 !important; }
 
   :is(
-  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Mute"]:not([aria-checked="true"]),
-  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Unmute"], [aria-label="Mute"][aria-checked="true"]),
-  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Deafen"]:not([aria-checked="true"]),
-  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Undeafen"], [aria-label="Deafen"][aria-checked="true"]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="ute" i], [aria-label*="icrophone" i]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="ute" i], [aria-label*="icrophone" i]):is([aria-label="Unmute" i], [aria-checked="true"], [class*="redIcon"], :has([class*="strikethrough"])),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="eafen" i], [aria-label*="eadphone" i]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="eafen" i], [aria-label*="eadphone" i]):is([aria-label="Undeafen" i], [aria-checked="true"], [class*="redIcon"], :has([class*="strikethrough"])),
   section[class*="panels_"] button[aria-label="User Settings"],
   section[class*="panels_"] button[aria-label="Disconnect"],
   :is(button, [role="button"])[aria-label="Inbox"],
@@ -66,10 +67,10 @@
             mask: var(--ore-icon) center / contain no-repeat;
   }
 
-  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Mute"]:not([aria-checked="true"]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/mic.svg'); }
-  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Unmute"], [aria-label="Mute"][aria-checked="true"]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/mic-off.svg'); }
-  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Deafen"]:not([aria-checked="true"]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/headphones.svg'); }
-  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Undeafen"], [aria-label="Deafen"][aria-checked="true"]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/headphones-off.svg'); }
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="ute" i], [aria-label*="icrophone" i]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/mic.svg'); }
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="ute" i], [aria-label*="icrophone" i]):is([aria-label="Unmute" i], [aria-checked="true"], [class*="redIcon"], :has([class*="strikethrough"])) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/mic-off.svg'); }
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="eafen" i], [aria-label*="eadphone" i]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/headphones.svg'); }
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="eafen" i], [aria-label*="eadphone" i]):is([aria-label="Undeafen" i], [aria-checked="true"], [class*="redIcon"], :has([class*="strikethrough"])) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/headphones-off.svg'); }
   section[class*="panels_"] button[aria-label="User Settings"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/settings.svg'); }
   section[class*="panels_"] button[aria-label="Disconnect"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/disconnect.svg'); }
   :is(button, [role="button"])[aria-label="Inbox"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/inbox.svg'); }
