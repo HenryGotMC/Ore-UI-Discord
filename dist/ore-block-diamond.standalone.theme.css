@@ -1,0 +1,678 @@
+/**
+ * @name Ore Block Diamond (standalone)
+ * @description Discord through the lens of blocky game UI: hard corners, 2px ink outlines, bevelled controls that press down, Monocraft display type, one vibrant ore accent. Dark + light.
+ * @author HenryGotMC
+ * @version 3.0.2
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;600&display=swap');
+@font-face { font-family: 'Monocraft'; src: url('https://cdn.jsdelivr.net/gh/IdreesInc/Monocraft@main/dist/Monocraft-ttf/Monocraft.ttf') format('truetype'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: 'Miracode'; src: local('Miracode'); font-weight: 100 900; font-display: swap; } /* install from github.com/IdreesInc/Miracode/releases */
+
+/* =====================================================================
+   1. OPTIONS
+   ===================================================================== */
+:root {
+  /* Ore accent: Diamond. */
+  --ore-accent: oklch(78% 0.14 200);
+
+  --ore-display-font: on;     /* on: Monocraft on headers, buttons, labels · off: Miracode everywhere */
+  --ore-square-avatars: on;   /* on: square avatars · off: Discord round */
+  --ore-grain: off;           /* on: faint surface grain (adds one fixed layer) */
+  --ore-motion: 90ms;
+}
+
+/* =====================================================================
+   2. TOKENS
+   ===================================================================== */
+:root {
+  --ore-font: 'Miracode', 'IBM Plex Sans';
+  --ore-mono: 'Miracode', 'IBM Plex Mono';
+  --ore-pixel: 'Monocraft';
+
+  --ore-ink:  oklch(13% 0.004 260);
+  --ore-sunk: oklch(16% 0.004 260);
+  --ore-bg-0: oklch(18% 0.004 260);
+  --ore-bg-1: oklch(22.5% 0.004 260);
+  --ore-bg-2: oklch(26% 0.004 260);
+  --ore-bg-3: oklch(33% 0.004 260);
+  --ore-bg-4: oklch(39% 0.004 260);
+  --ore-field-line: oklch(46% 0.004 260);
+  --ore-light: oklch(86% 0.003 260);
+  --ore-light-lo: oklch(62% 0.004 260);
+  --ore-on-light: oklch(18% 0.004 260);
+  --ore-hover: oklch(100% 0 0 / 0.06);
+  --ore-press: oklch(100% 0 0 / 0.1);
+
+  --ore-text-1: oklch(98% 0 0);
+  --ore-text-2: oklch(88% 0.003 260);
+  --ore-text-3: oklch(76% 0.004 260);
+  --ore-text-4: oklch(68% 0.004 260);
+  --ore-text-5: oklch(48% 0.004 260);
+
+  --ore-accent-hi:   oklch(from var(--ore-accent) calc(l + 0.08) c h);
+  --ore-accent-lo:   oklch(from var(--ore-accent) calc(l - 0.17) calc(c * 0.85) h);
+  --ore-accent-text: oklch(from var(--ore-accent) max(l, 0.8) calc(c * 0.85) h);
+  --ore-on-accent:   oklch(from var(--ore-accent) clamp(0.16, (0.6 - l) * 1000, 0.99) 0.02 h);
+  --ore-accent-soft: color-mix(in oklch, var(--ore-accent) 18%, transparent);
+
+  --ore-red: oklch(52% 0.19 25);
+  --ore-red-lo: oklch(38% 0.15 25);
+  --ore-red-text: oklch(72% 0.17 25);
+  --ore-on-red: oklch(98% 0 0);
+  --ore-go: oklch(58% 0.16 150);
+  --ore-go-lo: oklch(42% 0.13 150);
+  --ore-green: oklch(74% 0.17 150);
+  --ore-yellow: oklch(84% 0.15 90);
+  --ore-blue: oklch(76% 0.11 240);
+
+  --ore-raise: inset 0 2px 0 oklch(100% 0 0 / 0.12), inset 0 -4px 0 oklch(0% 0 0 / 0.3);
+  --ore-raise-sm: inset 0 2px 0 oklch(100% 0 0 / 0.1), inset 0 -2px 0 oklch(0% 0 0 / 0.3);
+  --ore-raise-accent: inset 0 2px 0 oklch(100% 0 0 / 0.25), inset 0 -4px 0 var(--ore-accent-lo);
+  --ore-raise-light: inset 0 2px 0 oklch(100% 0 0 / 0.5), inset 0 -4px 0 var(--ore-light-lo);
+  --ore-raise-red: inset 0 2px 0 oklch(100% 0 0 / 0.18), inset 0 -4px 0 var(--ore-red-lo);
+  --ore-raise-go: inset 0 2px 0 oklch(100% 0 0 / 0.25), inset 0 -4px 0 var(--ore-go-lo);
+  --ore-pressed: inset 0 2px 0 oklch(0% 0 0 / 0.25);
+  --ore-sunken: inset 0 2px 0 oklch(0% 0 0 / 0.35);
+  --ore-drop: 0 6px 0 oklch(0% 0 0 / 0.35);
+  --ore-edge: 2px solid var(--ore-ink);
+  --ore-outline: 0 0 0 2px var(--ore-ink);
+  --ore-t: var(--ore-motion) steps(2, end);
+}
+
+/* light mode — follows Settings → Appearance → Light */
+.theme-light {
+  --ore-ink:  oklch(28% 0.006 260);
+  --ore-sunk: oklch(98.5% 0.002 260);
+  --ore-bg-0: oklch(82% 0.004 260);
+  --ore-bg-1: oklch(88% 0.004 260);
+  --ore-bg-2: oklch(93% 0.003 260);
+  --ore-bg-3: oklch(97.5% 0.002 260);
+  --ore-bg-4: oklch(100% 0 0);
+  --ore-field-line: oklch(58% 0.005 260);
+  --ore-light: oklch(36% 0.005 260);
+  --ore-light-lo: oklch(22% 0.005 260);
+  --ore-on-light: oklch(98% 0 0);
+  --ore-hover: oklch(0% 0 0 / 0.06);
+  --ore-press: oklch(0% 0 0 / 0.1);
+  --ore-text-1: oklch(18% 0.004 260);
+  --ore-text-2: oklch(27% 0.004 260);
+  --ore-text-3: oklch(38% 0.005 260);
+  --ore-text-4: oklch(45% 0.005 260);
+  --ore-text-5: oklch(58% 0.004 260);
+  --ore-accent-text: oklch(from var(--ore-accent) min(l, 0.47) c h);
+  --ore-red-text: oklch(50% 0.19 25);
+  --ore-green: oklch(52% 0.15 150);
+  --ore-yellow: oklch(56% 0.13 75);
+  --ore-blue: oklch(48% 0.13 240);
+  --ore-raise: inset 0 2px 0 oklch(100% 0 0 / 0.8), inset 0 -4px 0 oklch(0% 0 0 / 0.14);
+  --ore-raise-sm: inset 0 2px 0 oklch(100% 0 0 / 0.8), inset 0 -2px 0 oklch(0% 0 0 / 0.14);
+  --ore-sunken: inset 0 2px 0 oklch(0% 0 0 / 0.1);
+  --ore-drop: 0 6px 0 oklch(0% 0 0 / 0.18);
+}
+
+/* =====================================================================
+   3. DISCORD VARIABLES (legacy + 2026 redesign names)
+   ===================================================================== */
+:root, .theme-dark, .theme-darker, .theme-midnight, .theme-light, .visual-refresh {
+  --font-primary: var(--ore-font), 'gg sans', 'Noto Sans', sans-serif;
+  --font-display: var(--font-primary);
+  --font-headline: var(--font-primary);
+  --font-code: var(--ore-mono), 'gg mono', Consolas, monospace;
+
+  /* surfaces */
+  --app-frame-background: var(--ore-bg-0);
+  --app-frame-border: var(--ore-ink);
+  --background-base-lowest: var(--ore-bg-0);
+  --background-base-lower: var(--ore-bg-1);
+  --background-base-low: var(--ore-bg-1);
+  --background-surface-high: var(--ore-bg-2);
+  --background-surface-higher: var(--ore-bg-2);
+  --background-surface-highest: var(--ore-bg-3);
+  --background-primary: var(--ore-bg-2);
+  --background-secondary: var(--ore-bg-1);
+  --background-secondary-alt: var(--ore-bg-0);
+  --background-tertiary: var(--ore-bg-0);
+  --background-accent: var(--ore-bg-3);
+  --background-floating: var(--ore-bg-2);
+  --background-nested-floating: var(--ore-bg-1);
+  --chat-background: var(--ore-bg-2);
+  --chat-background-default: var(--ore-bg-2);
+  --chat-border: var(--ore-ink);
+  --channeltextarea-background: var(--ore-sunk);
+  --custom-channel-members-bg: var(--ore-bg-1);
+  --input-background: var(--ore-sunk);
+  --modal-background: var(--ore-bg-2);
+  --modal-footer-background: var(--ore-bg-1);
+  --home-background: var(--ore-bg-2);
+  --bg-overlay-chat: var(--ore-bg-2);
+  --bg-overlay-app-frame: var(--ore-bg-0);
+  --deprecated-card-bg: var(--ore-bg-1);
+  --card-primary-bg: var(--ore-bg-1);
+  --card-secondary-bg: var(--ore-bg-1);
+
+  /* states */
+  --background-modifier-hover: var(--ore-hover);
+  --background-modifier-active: var(--ore-press);
+  --background-modifier-selected: var(--ore-bg-3);
+  --background-modifier-accent: var(--ore-ink);
+  --background-mod-subtle: var(--ore-hover);
+  --background-mod-normal: var(--ore-press);
+  --background-mod-strong: var(--ore-bg-3);
+  --background-message-hover: color-mix(in oklch, var(--ore-hover) 50%, transparent);
+  --background-message-highlight: var(--ore-accent-soft);
+  --background-mentioned: var(--ore-accent-soft);
+  --background-mentioned-hover: color-mix(in oklch, var(--ore-accent) 24%, transparent);
+
+  /* lines */
+  --border-faint: var(--ore-ink);
+  --border-subtle: var(--ore-ink);
+  --border-normal: var(--ore-ink);
+  --border-strong: var(--ore-field-line);
+  --border-brand: var(--ore-accent);
+
+  /* text & icons */
+  --text-normal: var(--ore-text-2);
+  --text-default: var(--ore-text-2);
+  --text-strong: var(--ore-text-1);
+  --text-secondary: var(--ore-text-3);
+  --text-muted: var(--ore-text-4);
+  --text-link: var(--ore-accent-text);
+  --text-brand: var(--ore-accent-text);
+  --text-positive: var(--ore-green);
+  --text-warning: var(--ore-yellow);
+  --text-danger: var(--ore-red-text);
+  --header-primary: var(--ore-text-1);
+  --header-secondary: var(--ore-text-3);
+  --channels-default: var(--ore-text-3);
+  --channel-icon: var(--ore-text-4);
+  --interactive-normal: var(--ore-text-3);
+  --interactive-hover: var(--ore-text-1);
+  --interactive-active: var(--ore-text-1);
+  --interactive-muted: var(--ore-text-5);
+  --icon-default: var(--ore-text-3);
+  --icon-muted: var(--ore-text-4);
+  --icon-strong: var(--ore-text-1);
+  --icon-brand: var(--ore-accent-text);
+
+  /* brand ramp → ore */
+  --brand-100: var(--ore-accent-soft); --brand-130: var(--ore-accent-soft); --brand-160: var(--ore-accent-soft);
+  --brand-200: var(--ore-accent-text); --brand-230: var(--ore-accent-text); --brand-260: var(--ore-accent-text);
+  --brand-300: var(--ore-accent-text); --brand-330: var(--ore-accent-text); --brand-345: var(--ore-accent-text); --brand-360: var(--ore-accent-text);
+  --brand-400: var(--ore-accent-hi); --brand-430: var(--ore-accent-hi); --brand-460: var(--ore-accent);
+  --brand-500: var(--ore-accent); --brand-530: var(--ore-accent);
+  --brand-560: var(--ore-accent-lo); --brand-600: var(--ore-accent-lo); --brand-630: var(--ore-accent-lo); --brand-660: var(--ore-accent-lo);
+  --brand-700: var(--ore-accent-lo); --brand-730: var(--ore-accent-lo); --brand-760: var(--ore-accent-lo); --brand-800: var(--ore-accent-lo);
+  --brand-experiment: var(--ore-accent);
+  --blurple-50: var(--ore-accent);
+  --bg-brand: var(--ore-accent);
+  --background-brand: var(--ore-accent);
+  --info-warning-foreground: var(--ore-accent);
+
+  /* controls & buttons */
+  --control-brand-foreground: var(--ore-accent-text);
+  --control-brand-foreground-new: var(--ore-accent-text);
+  --control-brand-background: var(--ore-accent);
+  --control-primary-background-default: var(--ore-accent);
+  --control-primary-background-hover: var(--ore-accent-hi);
+  --control-primary-background-active: var(--ore-accent);
+  --control-primary-text-default: var(--ore-on-accent);
+  --control-primary-text-hover: var(--ore-on-accent);
+  --control-primary-text-active: var(--ore-on-accent);
+  --control-primary-border-default: var(--ore-ink);
+  --control-secondary-background-default: var(--ore-bg-3);
+  --control-secondary-background-hover: var(--ore-bg-4);
+  --control-secondary-background-active: var(--ore-bg-3);
+  --control-secondary-text-default: var(--ore-text-1);
+  --control-checked-background-default: var(--ore-accent);
+  --control-checked-background-hover: var(--ore-accent-hi);
+  --control-checked-border-default: var(--ore-ink);
+  --control-unchecked-background-default: var(--ore-bg-3);
+  --button-filled-brand-background: var(--ore-accent);
+  --button-filled-brand-background-hover: var(--ore-accent-hi);
+  --button-filled-brand-background-active: var(--ore-accent);
+  --button-filled-brand-text: var(--ore-on-accent);
+  --button-secondary-background: var(--ore-bg-3);
+  --button-secondary-background-hover: var(--ore-bg-4);
+  --button-danger-background: var(--ore-red);
+  --redesign-button-primary-background: var(--ore-accent);
+  --redesign-button-primary-hover-background: var(--ore-accent-hi);
+  --redesign-button-primary-pressed-background: var(--ore-accent);
+  --redesign-button-primary-text: var(--ore-on-accent);
+  --redesign-button-primary-alt-background: var(--ore-accent);
+  --redesign-button-primary-alt-text: var(--ore-on-accent);
+  --redesign-button-secondary-background: var(--ore-bg-3);
+  --redesign-button-secondary-hover-background: var(--ore-bg-4);
+  --redesign-button-secondary-text: var(--ore-text-1);
+  --redesign-button-active-background: var(--ore-accent);
+  --redesign-button-selected-background: var(--ore-bg-3);
+  --redesign-button-selected-text: var(--ore-text-1);
+  --redesign-input-control-selected: var(--ore-accent);
+  --radio-bar-accent-color: var(--ore-accent);
+  --checkbox-background-checked: var(--ore-accent);
+  --checkbox-border-checked: var(--ore-ink);
+  --slider-fill: var(--ore-accent);
+  --bot-tag-background: var(--ore-bg-4);
+  --badge-brand-bg: var(--ore-accent);
+  --badge-brand-text: var(--ore-on-accent);
+
+  /* status */
+  --mention-foreground: var(--ore-accent-text);
+  --mention-background: var(--ore-accent-soft);
+  --status-positive: var(--ore-green);
+  --status-warning: var(--ore-yellow);
+  --status-danger: var(--ore-red);
+  --status-online: var(--ore-green);
+  --status-idle: var(--ore-yellow);
+  --status-dnd: var(--ore-red-text);
+  --status-offline: var(--ore-text-4);
+
+  /* shape */
+  --scrollbar-thin-thumb: var(--ore-bg-4);
+  --scrollbar-thin-track: transparent;
+  --scrollbar-auto-thumb: var(--ore-bg-4);
+  --scrollbar-auto-track: var(--ore-bg-1);
+  --radius-xs: 0; --radius-sm: 0; --radius-md: 0; --radius-lg: 0; --radius-xl: 0;
+  --elevation-low: none;
+  --elevation-high: var(--ore-drop);
+  --elevation-stroke: var(--ore-outline);
+}
+
+/* =====================================================================
+   4. BASE
+   ===================================================================== */
+body { font-family: var(--font-primary); -webkit-font-smoothing: antialiased; }
+::selection { background: color-mix(in oklch, var(--ore-accent) 45%, transparent); color: var(--ore-text-1); }
+a, [class*="anchor_"] { color: var(--ore-accent-text); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+@container style(--ore-grain: on) {
+  body::after {
+    content: ""; position: fixed; inset: 0; z-index: 99999; pointer-events: none; opacity: .03;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* hard corners where Discord hard-codes radii */
+button, input, textarea, code, pre,
+[role="menu"], [role^="menuitem"], [role="dialog"], [role="alertdialog"], [role="tooltip"], [role="tab"],
+[role="checkbox"], [role="radio"], [role="switch"], [role="slider"], [role="combobox"], [role="listbox"], [role="option"],
+[role="toolbar"], [role="progressbar"], [role="progressbar"] > *, [role="textbox"],
+[class*="containerDefault_"] [class*="link_"], [class*="channel_"] [class*="interactive_"], [class*="member_"] [class*="layout_"],
+[class*="tooltip_"], [class*="popout_"], [class*="userProfileOuter_"], [class*="userPopout"], [class*="autocomplete_"],
+[class*="searchBar_"], [class*="select_"], [class*="reaction_"], [class*="embedFull_"], [class*="embedWrapper_"],
+[class*="codeContainer_"], [class*="attachment_"], [class*="imageWrapper_"], [class*="panels_"],
+[class*="scrollableContainer_"], [class*="side_"] [class*="item_"], [class*="numberBadge_"], [class*="botTag_"], [class*="appTag_"],
+[class*="childWrapper_"], [class*="tile_"], [class*="card_"], [class*="notice_"], [class*="closeButton_"],
+[class*="checkbox_"], [class*="radio_"], [class*="radioBar_"], [class*="switch_"], [class*="banner_"], [class*="bannerSVGWrapper_"] {
+  border-radius: 0 !important;
+}
+
+/* =====================================================================
+   5. DISPLAY TYPE — Monocraft for structure, Miracode for reading
+   ===================================================================== */
+@container style(--ore-display-font: on) {
+  section[class*="title_"] h1, [class*="titleWrapper_"] h1, [class*="sidebar_"] header [class*="name_"], [class*="headerContent_"] h2,
+  [class*="containerDefault_"] [class*="mainContent_"] h3, [class*="membersGroup_"], button[class*="button_"],
+  [role="dialog"] h1, [class*="contentRegion_"] :is(h1, h2, h5), [class*="settingsPage"] :is(h1, h2, h3),
+  [class*="side_"] [class*="header_"], [class*="botTag_"], [class*="unreadPill_"], [class*="numberBadge_"], [class*="textBadge_"],
+  [class*="embedTitle_"], [class*="embedFieldName_"], [class*="reactionCount_"], [class*="divider_"] [class*="content_"] {
+    font-family: var(--ore-pixel), var(--ore-font), monospace !important;
+    letter-spacing: 0; font-weight: 400 !important;
+  }
+}
+
+/* =====================================================================
+   6. PANELS & SEAMS
+   ===================================================================== */
+nav[class*="guilds_"] { background: var(--ore-bg-0); }
+[class*="sidebar_"]:not([class*="sidebarList_"]) { background: var(--ore-bg-1); border-right: var(--ore-edge); }
+[class*="chat_"], [class*="chatContent_"] { background: var(--ore-bg-2); }
+section[class*="title_"], [class*="chat_"] > [class*="container_"] { background: var(--ore-bg-2); border-bottom: var(--ore-edge); box-shadow: none; }
+[class*="sidebar_"] header { background: var(--ore-bg-1); border-bottom: var(--ore-edge); box-shadow: none; }
+[class*="members_"], [class*="membersWrap_"] { background: var(--ore-bg-1); border-left: var(--ore-edge); }
+
+/* =====================================================================
+   7. SERVER RAIL
+   ===================================================================== */
+[class*="guildSeparator_"] { background: var(--ore-ink); height: 2px; width: 32px; }
+[class*="blobContainer_"] foreignObject { mask: none !important; }
+[class*="blobContainer_"] [class*="wrapper_"] { outline: var(--ore-edge); border-radius: 0 !important; }
+[class*="childWrapper_"] { background: var(--ore-bg-3); color: var(--ore-text-2); box-shadow: var(--ore-raise); transition: background var(--ore-t); }
+[class*="childWrapper_"]:hover { background: var(--ore-bg-4); color: var(--ore-text-1); }
+[class*="guilds_"] [class*="pill_"] [class*="item_"] { background: var(--ore-text-1); border-radius: 0; width: 4px; }
+[class*="numberBadge_"] { background: var(--ore-red) !important; color: var(--ore-on-red); border: var(--ore-edge); box-shadow: var(--ore-raise-sm); }
+[class*="guilds_"] :is([class*="lowerBadge_"], [class*="textBadge_"], [class*="newBadge"]) {
+  border-radius: 0 !important; background: var(--ore-accent) !important; color: var(--ore-on-accent) !important;
+  box-shadow: var(--ore-outline); font-size: 10px; transform: scale(.85); transform-origin: bottom right;
+}
+[class*="circleIconButton_"] { background: var(--ore-bg-3); color: var(--ore-accent-text); box-shadow: var(--ore-raise); border-radius: 0 !important; }
+[class*="circleIconButton_"]:hover { background: var(--ore-accent); color: var(--ore-on-accent); box-shadow: var(--ore-raise-accent); }
+
+/* =====================================================================
+   8. CHANNELS & TABS
+   ===================================================================== */
+[class*="containerDefault_"] [class*="link_"], [class*="channel_"] [class*="interactive_"], [role="tab"] { transition: background var(--ore-t); }
+[class*="containerDefault_"] [class*="link_"]:hover, [class*="channel_"] [class*="interactive_"]:hover, [role="tablist"] [role="tab"]:hover { background: var(--ore-hover); }
+[class*="modeSelected_"] [class*="link_"],
+[class*="channel_"] [class*="interactive_"][class*="selected_"],
+[class*="side_"] [class*="item_"][class*="selected_"],
+[role="tablist"] [role="tab"][aria-selected="true"] {
+  background: var(--ore-bg-3) !important; color: var(--ore-text-1) !important;
+  box-shadow: var(--ore-outline), var(--ore-raise) !important; border-bottom: 0 !important;
+}
+[role="tablist"] [role="tab"][aria-selected="true"]::before, [role="tablist"] [role="tab"][aria-selected="true"]::after { display: none; }
+[class*="modeSelected_"] :is([class*="icon_"], [class*="iconContainer_"] svg) { color: var(--ore-accent-text); }
+[class*="modeSelected_"] [class*="name_"], [class*="modeUnread_"] [class*="name_"] { color: var(--ore-text-1); }
+[class*="modeUnread_"] [class*="name_"] { font-weight: 600; }
+[class*="containerDefault_"] [class*="unread_"] { background: var(--ore-accent); width: 4px; height: 12px; border-radius: 0; }
+[class*="containerDefault_"] [class*="mainContent_"] h3 { font-size: 14px; text-transform: none; letter-spacing: .01em; color: var(--ore-text-3); }
+
+/* =====================================================================
+   9. MESSAGES
+   ===================================================================== */
+@container style(--ore-square-avatars: on) {
+  [class*="avatar_"], img[class*="avatar"], [class*="avatarStack_"] img, [class*="wrapper_"][role="img"] foreignObject,
+  [class*="profileFrame"], [class*="avatarDecoration"] { border-radius: 0 !important; mask: none !important; }
+  [class*="avatar_"] { box-shadow: var(--ore-outline); }
+  rect[mask*="status"] { rx: 0; ry: 0; }
+}
+[class*="groupStart_"][class*="cozy_"] { margin-top: 16px; }
+[class*="username_"] { font-weight: 600; }
+[class*="timestamp_"], [class*="timestamp_"] time { font-family: var(--font-code); font-size: 11px; color: var(--ore-text-4); }
+[class*="markup_"] { color: var(--ore-text-2); line-height: 1.45; }
+[class*="markup_"] strong { color: var(--ore-text-1); }
+
+[class*="mentioned_"] { background: var(--ore-accent-soft) !important; }
+[class*="mentioned_"]::before { background: var(--ore-accent) !important; width: 4px !important; }
+.mention, [class*="mention_"] { background: var(--ore-accent-soft); color: var(--ore-accent-text); padding: 0 3px; font-weight: 600; border-radius: 0; }
+.mention:hover { background: var(--ore-accent); color: var(--ore-on-accent); }
+
+[class*="divider_"] { border-top: 2px solid var(--ore-ink); }
+[class*="divider_"][class*="isUnread_"] { border-color: var(--ore-accent); }
+[class*="unreadPill_"] { background: var(--ore-accent); color: var(--ore-on-accent); border-radius: 0; }
+[class*="unreadPillCapStroke_"] { display: none; }
+
+code.inline { background: var(--ore-sunk); border: 1px solid var(--ore-ink); padding: .1em .35em; font-size: .86em; color: var(--ore-text-1); }
+[class*="markup_"] :is(code.hljs, pre > code) {
+  background: var(--ore-sunk); border: var(--ore-edge); box-shadow: var(--ore-sunken);
+  padding: 12px 14px; font-size: 13px; line-height: 1.55; color: var(--ore-text-2);
+}
+:is(.hljs-keyword, .hljs-built_in) { color: var(--ore-accent-text); }
+:is(.hljs-string, .hljs-attr) { color: var(--ore-green); }
+:is(.hljs-number, .hljs-literal) { color: var(--ore-yellow); }
+:is(.hljs-title, .hljs-function) { color: var(--ore-blue); }
+.hljs-comment { color: var(--ore-text-4); font-style: normal; }
+
+article[class*="embedFull_"], [class*="embedWrapper_"] { background: var(--ore-bg-1); border: var(--ore-edge); border-left-width: 6px; }
+[class*="embedTitle_"] { color: var(--ore-text-1); }
+[class*="embedFieldName_"] { font-size: 13px; color: var(--ore-text-3); }
+
+[class*="reaction_"] { background: var(--ore-bg-3); border: var(--ore-edge); box-shadow: var(--ore-raise-sm); }
+[class*="reaction_"]:hover { background: var(--ore-bg-4); }
+[class*="reaction_"][class*="reactionMe_"] { background: var(--ore-accent); box-shadow: inset 0 2px 0 oklch(100% 0 0 / 0.25), inset 0 -2px 0 var(--ore-accent-lo); }
+[class*="reactionMe_"] [class*="reactionCount_"] { color: var(--ore-on-accent); }
+
+[class*="buttonsInner_"] { background: var(--ore-bg-3); border: var(--ore-edge); box-shadow: var(--ore-raise-sm), var(--ore-drop); }
+[class*="buttonsInner_"] [class*="button_"]:hover { background: var(--ore-bg-4); }
+
+:is([class*="botTag_"], [class*="appTag_"]) { background: var(--ore-bg-4) !important; color: var(--ore-text-1) !important; border: var(--ore-edge); }
+[class*="botTag_"] svg { color: var(--ore-accent-text); }
+
+/* =====================================================================
+   10. FIELDS — sunken, white focus
+   ===================================================================== */
+[class*="channelTextArea_"] [class*="scrollableContainer_"],
+input[class*="input_"], [class*="inputDefault_"], textarea[class*="textArea_"], [class*="select_"], [class*="searchBar_"],
+[role="combobox"], [role="button"][aria-haspopup="listbox"],
+[role="textbox"][contenteditable="true"]:not([class*="slateTextArea_"]) {
+  background: var(--ore-sunk) !important; border: 2px solid var(--ore-field-line) !important;
+  box-shadow: var(--ore-sunken); color: var(--ore-text-1); transition: border-color var(--ore-t);
+}
+[class*="channelTextArea_"]:focus-within [class*="scrollableContainer_"],
+:is(input[class*="input_"], [class*="inputDefault_"], textarea[class*="textArea_"], [role="textbox"][contenteditable="true"]):focus,
+[class*="searchBar_"]:focus-within, [role="combobox"]:focus-within, [role="combobox"][aria-expanded="true"] {
+  border-color: var(--ore-text-1) !important;
+}
+[class*="typing_"] { font-size: 12.5px; color: var(--ore-text-3); }
+
+/* =====================================================================
+   11. BUTTONS — raised blocks that press down
+   ===================================================================== */
+button[class*="button_"] { border: var(--ore-edge) !important; font-weight: 600; padding-bottom: 3px; transition: background var(--ore-t), transform var(--ore-t); }
+button[class*="button_"]:is([class*="colorBrand_"], [class*="primary_"], [class*="brand_"]):not([class*="lookLink"]),
+a[class*="button_"][class*="primary_"] {
+  background: var(--ore-accent) !important; color: var(--ore-on-accent) !important; box-shadow: var(--ore-raise-accent) !important;
+}
+button[class*="button_"]:is([class*="colorBrand_"], [class*="primary_"]):hover { background: var(--ore-accent-hi) !important; }
+button[class*="button_"]:is([class*="secondary_"], [class*="tertiary_"]) { background: var(--ore-bg-3) !important; color: var(--ore-text-1) !important; box-shadow: var(--ore-raise) !important; }
+button[class*="button_"]:is([class*="secondary_"], [class*="tertiary_"]):hover { background: var(--ore-bg-4) !important; }
+button[class*="button_"]:is([class*="colorPrimary_"], [class*="colorGrey_"], [class*="colorTransparent_"][class*="lookFilled_"]) {
+  background: var(--ore-light) !important; color: var(--ore-on-light) !important; box-shadow: var(--ore-raise-light) !important;
+}
+button[class*="button_"]:is([class*="colorRed_"], [class*="critical"], [class*="danger"]) { background: var(--ore-red) !important; color: var(--ore-on-red) !important; box-shadow: var(--ore-raise-red) !important; }
+button[class*="button_"]:is([class*="positive_"], [class*="colorGreen_"]) { background: var(--ore-go) !important; color: oklch(12% 0.02 150) !important; box-shadow: var(--ore-raise-go) !important; }
+button[class*="button_"]:is([class*="lookLink_"], [class*="lookBlank_"]) { border: 0 !important; box-shadow: none !important; padding-bottom: 0; }
+button[class*="button_"]:active:not(:disabled) { transform: translateY(2px); box-shadow: var(--ore-pressed) !important; }
+button[class*="button_"]:disabled { background: var(--ore-bg-3) !important; color: var(--ore-text-4) !important; box-shadow: none !important; opacity: 1; }
+[role="toolbar"] { background: var(--ore-bg-3); border: var(--ore-edge); box-shadow: var(--ore-raise-sm); }
+[role="toolbar"] button[aria-pressed="true"] { background: var(--ore-accent) !important; color: var(--ore-on-accent) !important; }
+
+/* =====================================================================
+   12. CONTROLS — switches, checkboxes, radios, sliders
+   ===================================================================== */
+/* switch track: whatever element directly holds the switch input */
+div:has(> input[role="switch"]):not(section[class*="panels_"] *) {
+  background: var(--ore-bg-3) !important; border: var(--ore-edge) !important; box-shadow: var(--ore-sunken) !important; border-radius: 0 !important;
+}
+div:has(> input[role="switch"]:checked):not(section[class*="panels_"] *) { background: var(--ore-accent) !important; }
+div:has(> input[role="switch"]) :is(rect, [class*="thumb"], [class*="knob"]) { rx: 0 !important; ry: 0 !important; border-radius: 0 !important; fill: var(--ore-light) !important; background: var(--ore-light); }
+div:has(> input[role="switch"]:checked) svg path { fill: var(--ore-on-accent); }
+div:has(> input[role="switch"]:not(:checked)) svg path { fill: var(--ore-bg-3); }
+
+[class*="checkbox_"] { border: var(--ore-edge) !important; background: var(--ore-sunk); }
+[class*="checkbox_"][class*="checked_"] { background: var(--ore-accent) !important; }
+:is([class*="radioBar_"], [role="radiogroup"] [role="radio"]) { background: var(--ore-bg-1); border: var(--ore-edge); }
+:is([class*="radioBar_"][class*="selected_"], [role="radiogroup"] [role="radio"][aria-checked="true"]) { background: var(--ore-bg-3); box-shadow: inset 0 0 0 2px var(--ore-accent), var(--ore-raise); }
+[class*="radio_"]:is([class*="checked_"], :has(input:checked)) { border-color: var(--ore-accent) !important; }
+[role="radio"][aria-checked="true"] :is(svg, [class*="indicator"]) { color: var(--ore-accent) !important; fill: var(--ore-accent); }
+
+[class*="slider_"] [class*="bar_"] { border-radius: 0; background: var(--ore-sunk); border: var(--ore-edge); height: 8px; }
+[class*="slider_"] [class*="barFill_"] { background: var(--ore-accent); border-radius: 0; }
+[class*="slider_"] [class*="grabber_"], [role="slider"] {
+  border-radius: 0 !important; background: var(--ore-light) !important; border: var(--ore-edge) !important; box-shadow: var(--ore-raise-light) !important;
+}
+[class*="slider_"] [class*="grabber_"] { width: 12px; height: 24px; }
+[role="progressbar"] { background: var(--ore-sunk); border: var(--ore-edge); }
+[role="progressbar"] > * { background: var(--ore-accent) !important; }
+
+/* =====================================================================
+   13. FLOATING — menus, popouts, tooltips, modals
+   ===================================================================== */
+[role="menu"], [role="listbox"], [role="alertdialog"], [class*="popout_"], [class*="userProfileOuter_"], [class*="userPopout"], [class*="autocomplete_"], [class*="searchPopout_"] {
+  background: var(--ore-bg-2) !important; border: var(--ore-edge) !important; box-shadow: var(--ore-drop) !important;
+}
+[role="menu"] { padding: 4px; }
+[role="menu"] [role^="menuitem"] { min-height: 34px; color: var(--ore-text-2); font-size: 14px; }
+:is([role="menu"] [class*="focused_"], [role="listbox"] [role="option"]:is(:hover, [aria-selected="true"], [data-focused="true"])) {
+  background: var(--ore-bg-3) !important; color: var(--ore-text-1) !important; box-shadow: var(--ore-outline), var(--ore-raise-sm);
+}
+[role="menu"] [class*="colorDanger_"] { color: var(--ore-red-text); }
+[role="menu"] [class*="colorDanger_"][class*="focused_"] { background: var(--ore-red) !important; color: var(--ore-on-red) !important; }
+[role="menu"] [class*="colorBrand_"] { color: var(--ore-accent-text); }
+[role="menu"] [role="separator"] { border-top: var(--ore-edge); margin: 4px 0; }
+
+[class*="tooltip_"][class*="tooltipPrimary_"] { background: var(--ore-sunk); color: var(--ore-text-1); border: 2px solid var(--ore-field-line); box-shadow: var(--ore-drop); }
+[class*="tooltipPointer_"] { border-top-color: var(--ore-field-line) !important; }
+
+[class*="backdrop_"] { background: oklch(8% 0.004 260 / 0.78) !important; }
+[role="dialog"][class*="root_"], [class*="modal_"] [class*="root_"] { background: var(--ore-bg-2); border: var(--ore-edge); box-shadow: var(--ore-drop); }
+[role="dialog"] :is([class*="header_"], [class*="footer_"]) { background: var(--ore-bg-1); }
+[role="dialog"] [class*="header_"] { border-bottom: var(--ore-edge); }
+[role="dialog"] [class*="footer_"] { border-top: var(--ore-edge); }
+
+/* =====================================================================
+   14. SETTINGS, ACTIVE NOW, PROFILES
+   ===================================================================== */
+[class*="standardSidebarView_"] [class*="sidebarRegion_"] { background: var(--ore-bg-1); border-right: var(--ore-edge); }
+[class*="standardSidebarView_"] [class*="contentRegion_"] { background: var(--ore-bg-2); }
+[class*="side_"] [class*="header_"] { font-size: 13px; text-transform: none; color: var(--ore-text-3); }
+[class*="side_"] [class*="item_"] { color: var(--ore-text-3); }
+[class*="side_"] [class*="item_"]:hover { background: var(--ore-hover); color: var(--ore-text-1); }
+[class*="side_"] [class*="separator_"] { background: var(--ore-ink); height: 2px; }
+[class*="closeButton_"] { border: var(--ore-edge); background: var(--ore-bg-3); box-shadow: var(--ore-raise); color: var(--ore-text-1); }
+[class*="contentRegion_"] h2 { font-size: 24px; }
+[class*="divider_"][class*="dividerDefault_"] { border-top: var(--ore-edge); }
+:is([class*="settingsSection"], [class*="settingsCard"], [class*="settingsGroup"], [class*="contentRegion_"] [class*="card_"]) {
+  background: var(--ore-bg-1) !important; border: var(--ore-edge) !important; box-shadow: none;
+}
+:is([class*="nowPlayingColumn_"], [class*="activeNow"]) { background: var(--ore-bg-1) !important; border-left: var(--ore-edge); }
+:is([class*="nowPlayingColumn_"] [class*="itemCard_"], [class*="activeNow"] [class*="card"]) { background: var(--ore-bg-2) !important; border: var(--ore-edge); box-shadow: var(--ore-drop); }
+[class*="userProfileOuter_"] [class*="banner_"], [class*="bannerSVGWrapper_"] { mask: none !important; }
+
+/* profile section headings: compact bar hugging the text, nudged up */
+:is([class*="userProfileOuter_"], [class*="userProfileModal"], [class*="user-profile"], [class*="profileBody"], [class*="profilePanel"]) :is(h1, h2, h3, [class*="sectionTitle"], [class*="section_"] > [class*="title_"], [class*="activityHeader"], [class*="headerText"]) {
+  display: flex !important; align-items: center; min-height: 0 !important; margin: -4px 0 6px !important; padding: 2px 8px 4px !important;
+  line-height: 1.15 !important; background: var(--ore-bg-1) !important; border: 0 !important;
+  box-shadow: inset 0 -2px 0 var(--ore-ink) !important;
+}
+:is([class*="userProfileOuter_"], [class*="userProfileModal"], [class*="user-profile"], [class*="profileBody"], [class*="profilePanel"]) :is(h1, h2, h3, [class*="sectionTitle"], [class*="activityHeader"]) :is(::before, ::after),
+:is([class*="userProfileOuter_"], [class*="userProfileModal"], [class*="user-profile"], [class*="profileBody"], [class*="profilePanel"]) :is(h1, h2, h3, [class*="sectionTitle"], [class*="activityHeader"])::before,
+:is([class*="userProfileOuter_"], [class*="userProfileModal"], [class*="user-profile"], [class*="profileBody"], [class*="profilePanel"]) :is(h1, h2, h3, [class*="sectionTitle"], [class*="activityHeader"])::after { display: none !important; }
+:is([class*="userProfileOuter_"], [class*="userProfileModal"], [class*="user-profile"], [class*="profileBody"], [class*="profilePanel"]) :is(h1, h2, h3, [class*="sectionTitle"], [class*="activityHeader"]) * {
+  background: none !important; box-shadow: none !important; border: 0 !important; margin: 0 !important; padding: 0 !important; text-decoration: none !important;
+}
+:is([class*="userProfileOuter_"], [class*="userProfileModal"], [class*="user-profile"], [class*="profileBody"], [class*="profilePanel"]) :is(h1, h2, h3, [class*="sectionTitle"], [class*="activityHeader"]) *::after { display: none !important; }
+/* the big display name is not a section heading */
+:is([class*="userProfileOuter_"], [class*="userProfileModal"]) :is([class*="nickname"], [class*="displayName"], [class*="userTag"]) {
+  display: block !important; background: none !important; box-shadow: none !important; padding: 0 !important; min-height: 0;
+}
+
+/* =====================================================================
+   15. USER PANEL & VOICE
+   ===================================================================== */
+section[class*="panels_"] { background: var(--ore-bg-0); border-top: var(--ore-edge); }
+[class*="rtcConnectionStatus_"] [class*="labelWrapper_"] { color: var(--ore-green); }
+[class*="avatarSpeaking_"] { box-shadow: 0 0 0 2px var(--ore-green) !important; }
+[class*="tile_"] { border: var(--ore-edge); }
+[class*="tile_"][class*="speaking_"] { box-shadow: inset 0 0 0 3px var(--ore-green); }
+
+/* tool buttons stay neutral */
+section[class*="panels_"] :is(button, [role="button"], [role="switch"]) {
+  background: transparent !important; border: 0 !important; box-shadow: none !important;
+  color: var(--ore-text-2) !important; padding-bottom: 0 !important; transform: none !important;
+}
+section[class*="panels_"] :is(button, [role="switch"]):hover { background: var(--ore-bg-3) !important; color: var(--ore-text-1) !important; box-shadow: var(--ore-outline), var(--ore-raise-sm) !important; }
+section[class*="panels_"] :is([role="switch"][aria-checked="true"], button[class*="redIcon_"], button:has([class*="strikethrough_"])) {
+  background: color-mix(in oklch, var(--ore-red) 18%, transparent) !important; color: var(--ore-red-text) !important;
+}
+section[class*="panels_"] :is([class*="actionButtons_"], [class*="voiceButtonsContainer_"]) button {
+  background: var(--ore-bg-3) !important; border: var(--ore-edge) !important; box-shadow: var(--ore-raise-sm) !important; color: var(--ore-text-1) !important; min-height: 32px;
+}
+section[class*="panels_"] [class*="actionButtons_"] button:hover { background: var(--ore-bg-4) !important; }
+section[class*="panels_"] [class*="actionButtons_"] button:is([aria-checked="true"], [class*="buttonActive_"]) {
+  background: var(--ore-accent) !important; color: var(--ore-on-accent) !important; box-shadow: inset 0 2px 0 oklch(100% 0 0 / 0.25), inset 0 -2px 0 var(--ore-accent-lo) !important;
+}
+section[class*="panels_"] button[aria-label*="Disconnect"]:hover { background: var(--ore-red) !important; color: var(--ore-on-red) !important; }
+section[class*="panels_"] [class*="buttons_"] { position: relative; z-index: 1; background: var(--ore-bg-0); box-shadow: -2px 0 0 var(--ore-ink); padding-left: 4px; gap: 2px; }
+section[class*="panels_"] :is([class*="micButtonParent_"] button:last-child, button[class*="buttonChevron_"]) { width: 16px !important; min-width: 16px; color: var(--ore-text-4) !important; }
+section[class*="panels_"] [class*="nameplated_"]::before { opacity: .35; }
+
+/* =====================================================================
+   16. SCROLLBARS & ACCESSIBILITY
+   ===================================================================== */
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--ore-bg-1); }
+::-webkit-scrollbar-thumb { background: var(--ore-bg-4); border: var(--ore-edge); border-radius: 0; box-shadow: var(--ore-raise-sm); }
+
+:focus-visible, [class*="focusRing_"] { outline: 2px solid var(--ore-text-1) !important; outline-offset: 2px; border-radius: 0 !important; }
+html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after { transition: none !important; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Ore Block icons — 16×16 pixel icons painted as masks, so they take the
+   current text / hover / muted-red / accent colour. Toggle: --ore-icons: off */
+:root { --ore-icons: on; }
+
+@container style(--ore-icons: on) {
+  :is(
+  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Mute"]:not([aria-checked="true"]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Unmute"], [aria-label="Mute"][aria-checked="true"]),
+  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Deafen"]:not([aria-checked="true"]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Undeafen"], [aria-label="Deafen"][aria-checked="true"]),
+  section[class*="panels_"] button[aria-label="User Settings"],
+  section[class*="panels_"] button[aria-label="Disconnect"],
+  :is(button, [role="button"])[aria-label="Inbox"],
+  :is(a, button, [role="button"])[aria-label="Help"],
+  :is(button, [role="button"])[aria-label="Pinned Messages"],
+  :is(button, [role="button"]):is([aria-label="Show Member List"], [aria-label="Hide Member List"], [aria-label="Member List"]),
+  :is(button, [role="button"])[aria-label="Notification Settings"],
+  :is(button, [role="button"])[aria-label="Threads"],
+  [class*="guilds_"] [aria-label="Add a Server"] [class*="circleIconButton_"],
+  a[aria-label*="(text channel)"] [class*="iconContainer_"],
+  a[aria-label*="(voice channel)"] [class*="iconContainer_"],
+  [class*="searchBar_"] [class*="iconLayout_"]
+  ) { position: relative; }
+
+  :is(
+  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Mute"]:not([aria-checked="true"]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Unmute"], [aria-label="Mute"][aria-checked="true"]),
+  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Deafen"]:not([aria-checked="true"]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Undeafen"], [aria-label="Deafen"][aria-checked="true"]),
+  section[class*="panels_"] button[aria-label="User Settings"],
+  section[class*="panels_"] button[aria-label="Disconnect"],
+  :is(button, [role="button"])[aria-label="Inbox"],
+  :is(a, button, [role="button"])[aria-label="Help"],
+  :is(button, [role="button"])[aria-label="Pinned Messages"],
+  :is(button, [role="button"]):is([aria-label="Show Member List"], [aria-label="Hide Member List"], [aria-label="Member List"]),
+  :is(button, [role="button"])[aria-label="Notification Settings"],
+  :is(button, [role="button"])[aria-label="Threads"],
+  [class*="guilds_"] [aria-label="Add a Server"] [class*="circleIconButton_"],
+  a[aria-label*="(text channel)"] [class*="iconContainer_"],
+  a[aria-label*="(voice channel)"] [class*="iconContainer_"],
+  [class*="searchBar_"] [class*="iconLayout_"]
+  ) svg { opacity: 0 !important; }
+
+  :is(
+  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Mute"]:not([aria-checked="true"]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Unmute"], [aria-label="Mute"][aria-checked="true"]),
+  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Deafen"]:not([aria-checked="true"]),
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Undeafen"], [aria-label="Deafen"][aria-checked="true"]),
+  section[class*="panels_"] button[aria-label="User Settings"],
+  section[class*="panels_"] button[aria-label="Disconnect"],
+  :is(button, [role="button"])[aria-label="Inbox"],
+  :is(a, button, [role="button"])[aria-label="Help"],
+  :is(button, [role="button"])[aria-label="Pinned Messages"],
+  :is(button, [role="button"]):is([aria-label="Show Member List"], [aria-label="Hide Member List"], [aria-label="Member List"]),
+  :is(button, [role="button"])[aria-label="Notification Settings"],
+  :is(button, [role="button"])[aria-label="Threads"],
+  [class*="guilds_"] [aria-label="Add a Server"] [class*="circleIconButton_"],
+  a[aria-label*="(text channel)"] [class*="iconContainer_"],
+  a[aria-label*="(voice channel)"] [class*="iconContainer_"],
+  [class*="searchBar_"] [class*="iconLayout_"]
+  )::after {
+    content: ""; position: absolute; inset: 0; margin: auto; pointer-events: none;
+    width: var(--ore-icon-size, 20px); height: var(--ore-icon-size, 20px);
+    background: currentColor;
+    -webkit-mask: var(--ore-icon) center / contain no-repeat;
+            mask: var(--ore-icon) center / contain no-repeat;
+  }
+
+  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Mute"]:not([aria-checked="true"]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/mic.svg'); }
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Unmute"], [aria-label="Mute"][aria-checked="true"]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/mic-off.svg'); }
+  section[class*="panels_"] :is(button, [role="switch"])[aria-label="Deafen"]:not([aria-checked="true"]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/headphones.svg'); }
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label="Undeafen"], [aria-label="Deafen"][aria-checked="true"]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/headphones-off.svg'); }
+  section[class*="panels_"] button[aria-label="User Settings"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/settings.svg'); }
+  section[class*="panels_"] button[aria-label="Disconnect"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/disconnect.svg'); }
+  :is(button, [role="button"])[aria-label="Inbox"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/inbox.svg'); }
+  :is(a, button, [role="button"])[aria-label="Help"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/help.svg'); }
+  :is(button, [role="button"])[aria-label="Pinned Messages"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/pin.svg'); }
+  :is(button, [role="button"]):is([aria-label="Show Member List"], [aria-label="Hide Member List"], [aria-label="Member List"]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/members.svg'); }
+  :is(button, [role="button"])[aria-label="Notification Settings"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/bell.svg'); }
+  :is(button, [role="button"])[aria-label="Threads"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/threads.svg'); }
+  [class*="guilds_"] [aria-label="Add a Server"] [class*="circleIconButton_"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/add.svg'); }
+  a[aria-label*="(text channel)"] [class*="iconContainer_"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/hash.svg'); }
+  a[aria-label*="(voice channel)"] [class*="iconContainer_"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/voice.svg'); }
+  [class*="searchBar_"] [class*="iconLayout_"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/search.svg'); }
+
+  :is(a[aria-label*="channel)"] [class*="iconContainer_"], [class*="searchBar_"] [class*="iconLayout_"]) { --ore-icon-size: 18px; }
+  [class*="guilds_"] [aria-label="Add a Server"] [class*="circleIconButton_"] { --ore-icon-size: 22px; }
+}
