@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.1.2
+- Hosting: loaders, core and icons load from GitHub Pages (`henrygotmc.github.io/Ore-UI-Discord`) instead of jsDelivr — updates reach Discord within ~10 minutes instead of up to 7 days. Old jsDelivr links still work
+
 ## 3.1.1
 - Fix: mic/headphones icon disappearing after unmute/undeafen — icons now match any Mute/Unmute/Deafen label and read the off-state from aria-checked, red icon or strikethrough
 

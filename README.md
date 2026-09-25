@@ -13,10 +13,12 @@ A blocky, Ore UI–inspired theme for **Vencord / Vesktop**: hard corners, 2px i
 **Auto-updating (recommended)** — Vencord → Themes → Online Themes, paste one:
 
 ```
-https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/themes/ore-block-emerald.theme.css
-https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/themes/ore-block-diamond.theme.css
-https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/themes/ore-block-amethyst.theme.css
+https://henrygotmc.github.io/Ore-UI-Discord/themes/ore-block-emerald.theme.css
+https://henrygotmc.github.io/Ore-UI-Discord/themes/ore-block-diamond.theme.css
+https://henrygotmc.github.io/Ore-UI-Discord/themes/ore-block-amethyst.theme.css
 ```
+
+Already using a `cdn.jsdelivr.net` link? It still works, but Discord may cache it for up to 7 days. Switch to the link above to get updates within ~10 minutes.
 
 **Offline** — download a file from [`dist/`](dist) and drop it in Vencord → Themes → Open Themes Folder. Enable only one Ore Block theme at a time.
 

@@ -1,4 +1,4 @@
-/* Ore Block icons v3.1.1 — mic/headphones match any Mute/Unmute/Deafen label; off-state via aria-checked, red icon or strikethrough.
+/* Ore Block icons v3.1.2 — mic/headphones match any Mute/Unmute/Deafen label; off-state via aria-checked, red icon or strikethrough.
    Ore Block icons — 16×16 pixel icons painted as masks, so they take the
    current text / hover / muted-red / accent colour. Toggle: --ore-icons: off */
 :root { --ore-icons: on; }
@@ -67,22 +67,22 @@
             mask: var(--ore-icon) center / contain no-repeat;
   }
 
-  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="ute" i], [aria-label*="icrophone" i]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/mic.svg'); }
-  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="ute" i], [aria-label*="icrophone" i]):is([aria-label="Unmute" i], [aria-checked="true"], [class*="redIcon"], :has([class*="strikethrough"])) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/mic-off.svg'); }
-  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="eafen" i], [aria-label*="eadphone" i]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/headphones.svg'); }
-  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="eafen" i], [aria-label*="eadphone" i]):is([aria-label="Undeafen" i], [aria-checked="true"], [class*="redIcon"], :has([class*="strikethrough"])) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/headphones-off.svg'); }
-  section[class*="panels_"] button[aria-label="User Settings"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/settings.svg'); }
-  section[class*="panels_"] button[aria-label="Disconnect"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/disconnect.svg'); }
-  :is(button, [role="button"])[aria-label="Inbox"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/inbox.svg'); }
-  :is(a, button, [role="button"])[aria-label="Help"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/help.svg'); }
-  :is(button, [role="button"])[aria-label="Pinned Messages"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/pin.svg'); }
-  :is(button, [role="button"]):is([aria-label="Show Member List"], [aria-label="Hide Member List"], [aria-label="Member List"]) { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/members.svg'); }
-  :is(button, [role="button"])[aria-label="Notification Settings"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/bell.svg'); }
-  :is(button, [role="button"])[aria-label="Threads"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/threads.svg'); }
-  [class*="guilds_"] [aria-label="Add a Server"] [class*="circleIconButton_"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/add.svg'); }
-  a[aria-label*="(text channel)"] [class*="iconContainer_"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/hash.svg'); }
-  a[aria-label*="(voice channel)"] [class*="iconContainer_"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/voice.svg'); }
-  [class*="searchBar_"] [class*="iconLayout_"] { --ore-icon: url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/icons/search.svg'); }
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="ute" i], [aria-label*="icrophone" i]) { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/mic.svg'); }
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="ute" i], [aria-label*="icrophone" i]):is([aria-label="Unmute" i], [aria-checked="true"], [class*="redIcon"], :has([class*="strikethrough"])) { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/mic-off.svg'); }
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="eafen" i], [aria-label*="eadphone" i]) { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/headphones.svg'); }
+  section[class*="panels_"] :is(button, [role="switch"]):is([aria-label*="eafen" i], [aria-label*="eadphone" i]):is([aria-label="Undeafen" i], [aria-checked="true"], [class*="redIcon"], :has([class*="strikethrough"])) { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/headphones-off.svg'); }
+  section[class*="panels_"] button[aria-label="User Settings"] { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/settings.svg'); }
+  section[class*="panels_"] button[aria-label="Disconnect"] { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/disconnect.svg'); }
+  :is(button, [role="button"])[aria-label="Inbox"] { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/inbox.svg'); }
+  :is(a, button, [role="button"])[aria-label="Help"] { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/help.svg'); }
+  :is(button, [role="button"])[aria-label="Pinned Messages"] { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/pin.svg'); }
+  :is(button, [role="button"]):is([aria-label="Show Member List"], [aria-label="Hide Member List"], [aria-label="Member List"]) { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/members.svg'); }
+  :is(button, [role="button"])[aria-label="Notification Settings"] { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/bell.svg'); }
+  :is(button, [role="button"])[aria-label="Threads"] { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/threads.svg'); }
+  [class*="guilds_"] [aria-label="Add a Server"] [class*="circleIconButton_"] { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/add.svg'); }
+  a[aria-label*="(text channel)"] [class*="iconContainer_"] { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/hash.svg'); }
+  a[aria-label*="(voice channel)"] [class*="iconContainer_"] { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/voice.svg'); }
+  [class*="searchBar_"] [class*="iconLayout_"] { --ore-icon: url('https://henrygotmc.github.io/Ore-UI-Discord/icons/search.svg'); }
 
   :is(a[aria-label*="channel)"] [class*="iconContainer_"], [class*="searchBar_"] [class*="iconLayout_"]) { --ore-icon-size: 18px; }
   [class*="guilds_"] [aria-label="Add a Server"] [class*="circleIconButton_"] { --ore-icon-size: 22px; }

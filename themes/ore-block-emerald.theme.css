@@ -2,12 +2,12 @@
  * @name Ore Block Emerald
  * @description Blocky Ore UI–inspired Discord theme with a emerald accent. Auto-updates from GitHub.
  * @author HenryGotMC
- * @version 3.1.1
+ * @version 3.1.2
  * @source https://github.com/HenryGotMC/Ore-UI-Discord
 */
 
-@import url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/src/ore-block.css');
-@import url('https://cdn.jsdelivr.net/gh/HenryGotMC/Ore-UI-Discord@main/src/ore-icons.css');
+@import url('https://henrygotmc.github.io/Ore-UI-Discord/src/ore-block.css');
+@import url('https://henrygotmc.github.io/Ore-UI-Discord/src/ore-icons.css');
 
 :root {
   --ore-accent: oklch(62% 0.19 150);
